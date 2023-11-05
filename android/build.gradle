@@ -1,0 +1,48 @@
+buildscript {
+    ext.kotlin_version = '1.7.10'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.10'
+        implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+  }
+}
+android {
+    defaultConfig {
+        // ...
+        minSdkVersion 16
+        targetSdkVersion 28
+        multiDexEnabled true
+    }
+}
+
+dependencies {
+  implementation 'com.android.support:multidex:1.0.3'
+}
+
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
+
+apply plugin: 'com.google.gms.google-services'
